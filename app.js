@@ -19,22 +19,27 @@ var helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var photosRouter = require('./routes/photos');
 
 var app = express();
 app.use(helmet());    // appというオブジェクトのuse関数を使って、helmetを使うように登録する
 
-// view engine setup
+/*
+テンプレートのファイルが'viewsディレクトリ'にあることと、
+テンプレートエンジンが'pug'であることを設定している。
+*/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'));   // ログを出すための logger を使う設定 
+app.use(express.json());  // json形式を解釈したり作成するための json を使う設定
+app.use(express.urlencoded({ extended: false }));   // URLをエンコードしたりデコードするための urlencoded を使う設定
+app.use(cookieParser());  // Cookieを解釈したり作成するための cookieParser を使う設定
+app.use(express.static(path.join(__dirname, 'public')));  // 静的なファイルを public というディレクトリにするという設定
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/photos', photosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
